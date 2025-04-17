@@ -1,0 +1,28 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+users:
+  - default
+  - name: baumgartmatt
+    gecos: Matt Baumgart
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    shell: /bin/bash
+    groups: users, admin
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIEe9HucoQl6jU3VfT7MaZMRcjDxYukkLnv9k5j9o55N matth@PC-Matthias
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBEgiJeJGL+xAtv4vcw2QJ3IOTkrJ+cIttTxeqfvBy6F Handy-Key
+
+runcmd:
+  - wget https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb -O /tmp/jdk-24_linux-x64_bin.deb
+  - apt install /tmp/jdk-24_linux-x64_bin.deb -y
+  - mkdir -p /server
+  - echo "/dev/sdb1 /server ext4 defaults 0 0" >> /etc/fstab
+  - mount /dev/sdb1 /server
+  - ufw allow 22
+  - ufw allow 25565
+  - echo -e "y\n" | ufw enable
+  - /server/run.sh
+
+final_message: "Cloud-init finished setting up baumgartmatt user on instance."

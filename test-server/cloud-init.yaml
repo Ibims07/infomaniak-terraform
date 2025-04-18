@@ -6,7 +6,7 @@ package_upgrade: true
 users:
   - default
   - name: baumgartmatt
-    gecos: Matt Baumgart
+    gecos: Matthias Baumgartner
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     shell: /bin/bash
     groups: users, admin
@@ -23,6 +23,6 @@ runcmd:
   - ufw allow 22
   - ufw allow 25565
   - echo -e "y\n" | ufw enable
-  - /server/run.sh
+  - sudo -u baumgartmatt /server/run.sh
 
 final_message: "Cloud-init finished setting up baumgartmatt user on instance."
